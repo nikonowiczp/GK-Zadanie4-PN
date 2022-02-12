@@ -66,16 +66,16 @@ namespace GK_Zadanie4_PN
             for(int i = 0; i < 4; i++)
             {
                 int next = i == 3 ? 0 : i+1;
-                controller.DrawLine(CubePoints[0,i], CubePoints[0,next], Color.Black);
+                controller.DrawLine(CubePoints[0, i], CubePoints[0, next], Color.Black);
             }
             for (int i = 0; i < 4; i++)
             {
                 int next = i == 3 ? 0 : i + 1;
-                controller.DrawLine(CubePoints[1,i], CubePoints[1,next], Color.Black);
+                controller.DrawLine(CubePoints[1, i], CubePoints[1, next], Color.Black);
             }
             for (int i = 0; i < 4; i++)
             {
-                controller.DrawLine(CubePoints[0,i], CubePoints[ 1,i], Color.Black);
+                controller.DrawLine(CubePoints[0, i], CubePoints[1, i], Color.Black);
             }
         }
 
