@@ -8,11 +8,12 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 namespace GK_Zadanie4_PN.Animations
 {
-    internal class AnimationLooped : IAnimation
+    internal class AnimationLooped : Animation
     {
         //gets nextMovement matrix and proceeds the animation.
         //Next calls to that functions will retrieve consecutive animation frames
-        public Matrix<double> GetNextFrameMatrix()
+
+        public override Matrix<double> GetNextFrameMatrixPrivate()
         {
             throw new NotImplementedException();
         }

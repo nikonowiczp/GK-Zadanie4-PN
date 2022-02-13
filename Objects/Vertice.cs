@@ -8,15 +8,25 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace GK_Zadanie4_PN.Objects
 {
-    //All Vertices needs all of those number, and it should be faster to make them all double rather than some other classes
     public class Vertice
     {
+        public Vector<double> modelPosition;
+
+        public Vector<double> modelNormal;
+
+        public Vector<double> modelTangent;
+
+        public Vector<double> modelBinormal;
+
+        public Vector<double> modelTexture;
+
+
         public Vertice(double x, double y, double z, double normalX, double normalY, double normalZ, double tangentX, double tangentY, double tangentZ, double binormalX, double binormalY, double binormalZ, double textureX, double textureY, double textureZ)
         {
             modelPosition = Vector.Build.DenseOfArray(new double[] { x, y, z });
 
             modelNormal = Vector.Build.DenseOfArray( new double[] { normalX, normalY, normalZ });
-            modelTexture.Normalize(2);
+            
             modelTangent = Vector.Build.DenseOfArray(new double[] {tangentX, tangentY, tangentZ });
 
             modelBinormal = Vector.Build.DenseOfArray(new double[] {binormalX, binormalY, binormalZ });
@@ -33,16 +43,23 @@ namespace GK_Zadanie4_PN.Objects
             modelBinormal = vertice.modelBinormal.Clone();
             modelTexture = vertice.modelTexture.Clone();
         }
-        public Vector<double> modelPosition;
+         
+        public void MakeScreenCoordinatesFromClipping()
+        {
+            if(modelPosition.Count != 4)
+            {
+                throw new Exception("Not a clipping coordinate!");
+            }
 
-        public Vector<double> modelNormal;
+            if (modelPosition[3] == 0)
+            {
+                return;
+                throw new Exception("Fourth coordinate 0");
+            }
 
-        public Vector<double> modelTangent;
-
-        public Vector<double> modelBinormal;
-
-        public Vector<double> modelTexture; 
-        
+            double last = modelPosition[3];
+            modelPosition =Vector<double>.Build.DenseOfArray(new double[] {modelPosition[0]/last, modelPosition[1]/last, modelPosition[2]/last});
+        }
         public void MoveByMatrix(Matrix<double> moveMatrix)
         {
             throw new NotImplementedException();

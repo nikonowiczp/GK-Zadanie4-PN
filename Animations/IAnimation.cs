@@ -8,8 +8,10 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 namespace GK_Zadanie4_PN.Animations
 {
-    internal interface IAnimation
+    public interface IAnimation
     {
         public Matrix<double> GetNextFrameMatrix();
+        public void AddInnerAnimation(IAnimation innerAnimation);
+
     }
 }
