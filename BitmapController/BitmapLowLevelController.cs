@@ -37,6 +37,7 @@ namespace GK_Zadanie4_PN.BitmapController
         public void SetSinglePixel(int x, int y, Color colour)
         {
             if (x >= Width || y>=Height) return;
+            if(x<=0 || y<=0) return;
             int index = x + (y * Width);
             int col = colour.ToArgb();
 

@@ -17,7 +17,7 @@ namespace GK_Zadanie4_PN.Objects
             modelBinormal = vertice.modelBinormal.Clone();
             modelTexture = vertice.modelTexture.Clone();
         }
-        public Vector<double> modelPosition;
+        public Matrix<double> modelPosition;
 
         public Vector<double> modelNormal;
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 using GK_Zadanie4_PN.Animations;
+using System.Drawing;
 
 namespace GK_Zadanie4_PN.Objects
 {
@@ -16,8 +17,9 @@ namespace GK_Zadanie4_PN.Objects
         public Matrix<double> originalModelMatrix;
 
         public Matrix<double> ModelMatrix;
+        public Color ObjectColor = Color.Aqua;
 
-        
+
         public IAnimation modelAnimation;
 
         public void GenerateNextFrame()

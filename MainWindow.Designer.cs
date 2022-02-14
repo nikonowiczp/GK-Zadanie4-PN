@@ -38,25 +38,29 @@ namespace GK_Zadanie4_PN
             this.camera2Button = new System.Windows.Forms.Button();
             this.camera1Button = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.staticLightingButton = new System.Windows.Forms.Button();
+            this.gouraudaLightingButton = new System.Windows.Forms.Button();
+            this.Phong = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.28917F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.71083F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 244F));
             this.tableLayoutPanel1.Controls.Add(this.pictureBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 76.88889F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 23.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(951, 450);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -65,7 +69,7 @@ namespace GK_Zadanie4_PN
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(710, 444);
+            this.pictureBox1.Size = new System.Drawing.Size(701, 444);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
@@ -73,10 +77,11 @@ namespace GK_Zadanie4_PN
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.groupBox1);
+            this.flowLayoutPanel1.Controls.Add(this.groupBox2);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(719, 3);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(710, 3);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(229, 444);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(238, 444);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // groupBox1
@@ -95,7 +100,7 @@ namespace GK_Zadanie4_PN
             // 
             // camera3Button
             // 
-            this.camera3Button.Location = new System.Drawing.Point(-3, 96);
+            this.camera3Button.Location = new System.Drawing.Point(6, 61);
             this.camera3Button.Name = "camera3Button";
             this.camera3Button.Size = new System.Drawing.Size(94, 29);
             this.camera3Button.TabIndex = 2;
@@ -105,7 +110,7 @@ namespace GK_Zadanie4_PN
             // 
             // camera2Button
             // 
-            this.camera2Button.Location = new System.Drawing.Point(-3, 61);
+            this.camera2Button.Location = new System.Drawing.Point(106, 26);
             this.camera2Button.Name = "camera2Button";
             this.camera2Button.Size = new System.Drawing.Size(94, 29);
             this.camera2Button.TabIndex = 1;
@@ -115,7 +120,7 @@ namespace GK_Zadanie4_PN
             // 
             // camera1Button
             // 
-            this.camera1Button.Location = new System.Drawing.Point(-3, 26);
+            this.camera1Button.Location = new System.Drawing.Point(6, 26);
             this.camera1Button.Name = "camera1Button";
             this.camera1Button.Size = new System.Drawing.Size(94, 29);
             this.camera1Button.TabIndex = 0;
@@ -126,6 +131,50 @@ namespace GK_Zadanie4_PN
             // timer1
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.Phong);
+            this.groupBox2.Controls.Add(this.gouraudaLightingButton);
+            this.groupBox2.Controls.Add(this.staticLightingButton);
+            this.groupBox2.Location = new System.Drawing.Point(3, 134);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(238, 125);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Lighting";
+            // 
+            // staticLightingButton
+            // 
+            this.staticLightingButton.Location = new System.Drawing.Point(6, 26);
+            this.staticLightingButton.Name = "staticLightingButton";
+            this.staticLightingButton.Size = new System.Drawing.Size(94, 29);
+            this.staticLightingButton.TabIndex = 0;
+            this.staticLightingButton.Text = "Static";
+            this.staticLightingButton.UseVisualStyleBackColor = true;
+            this.staticLightingButton.Click += new System.EventHandler(this.staticLightingButton_Click);
+            // 
+            // gouraudaLightingButton
+            // 
+            this.gouraudaLightingButton.Location = new System.Drawing.Point(106, 26);
+            this.gouraudaLightingButton.Name = "gouraudaLightingButton";
+            this.gouraudaLightingButton.Size = new System.Drawing.Size(94, 29);
+            this.gouraudaLightingButton.TabIndex = 1;
+            this.gouraudaLightingButton.Text = "Gouraud";
+            this.gouraudaLightingButton.UseVisualStyleBackColor = true;
+            this.gouraudaLightingButton.Click += new System.EventHandler(this.gouraudaLightingButton_Click);
+            // 
+            // Phong
+            // 
+            this.Phong.Location = new System.Drawing.Point(6, 61);
+            this.Phong.Name = "Phong";
+            this.Phong.Size = new System.Drawing.Size(94, 29);
+            this.Phong.TabIndex = 2;
+            this.Phong.Text = "Phong";
+            this.Phong.UseVisualStyleBackColor = true;
+            this.Phong.Click += new System.EventHandler(this.Phong_Click);
             // 
             // MainWindow
             // 
@@ -141,6 +190,7 @@ namespace GK_Zadanie4_PN
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -155,6 +205,10 @@ namespace GK_Zadanie4_PN
         private System.Windows.Forms.Button camera3Button;
         private System.Windows.Forms.Button camera2Button;
         private System.Windows.Forms.Button camera1Button;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button Phong;
+        private System.Windows.Forms.Button gouraudaLightingButton;
+        private System.Windows.Forms.Button staticLightingButton;
     }
 }
 

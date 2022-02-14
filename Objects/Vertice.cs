@@ -10,7 +10,7 @@ namespace GK_Zadanie4_PN.Objects
 {
     public class Vertice
     {
-        public Vector<double> modelPosition;
+        public Matrix<double> modelPosition;
 
         public Vector<double> modelNormal;
 
@@ -20,10 +20,11 @@ namespace GK_Zadanie4_PN.Objects
 
         public Vector<double> modelTexture;
 
+        public Matrix<double> worldPosition;
 
         public Vertice(double x, double y, double z, double normalX, double normalY, double normalZ, double tangentX, double tangentY, double tangentZ, double binormalX, double binormalY, double binormalZ, double textureX, double textureY, double textureZ)
         {
-            modelPosition = Vector.Build.DenseOfArray(new double[] { x, y, z });
+            modelPosition = Vector.Build.DenseOfArray(new double[] { x, y, z }).ToColumnMatrix();
 
             modelNormal = Vector.Build.DenseOfArray( new double[] { normalX, normalY, normalZ });
             
@@ -46,19 +47,19 @@ namespace GK_Zadanie4_PN.Objects
          
         public void MakeScreenCoordinatesFromClipping()
         {
-            if(modelPosition.Count != 4)
+            if(modelPosition.RowCount != 4)
             {
                 throw new Exception("Not a clipping coordinate!");
             }
 
-            if (modelPosition[3] == 0)
+            if (modelPosition[3, 0] == 0)
             {
                 return;
                 throw new Exception("Fourth coordinate 0");
             }
 
-            double last = modelPosition[3];
-            modelPosition =Vector<double>.Build.DenseOfArray(new double[] {modelPosition[0]/last, modelPosition[1]/last, modelPosition[2]/last});
+            double last = modelPosition[3,0];
+            modelPosition =Vector<double>.Build.DenseOfArray(new double[] {modelPosition[0,0]/last, modelPosition[1,0]/last, modelPosition[2,0]/last}).ToColumnMatrix();
         }
         public void MoveByMatrix(Matrix<double> moveMatrix)
         {

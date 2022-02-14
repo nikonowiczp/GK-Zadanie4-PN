@@ -37,14 +37,14 @@ namespace GK_Zadanie4_PN.Scene
             upVector = upVector.Normalize(2);
 
             var firstView = DenseMatrix.OfArray(new double[,] {
-            {rightVector[0],rightVector[1],rightVector[2],0},
-            {upVector[0],upVector[1],upVector[2],0},
-            {dVector[0],dVector[1],dVector[2],0},
-            {0,0,0,1}});
+            {rightVector[0],rightVector[1], rightVector[2], 0},
+            {upVector[0],   upVector[1],    upVector[2],    0},
+            {dVector[0],    dVector[1],     dVector[2],     0},
+            {0,             0,              0,              1}});
             var secondView = DenseMatrix.OfArray(new double[,] {
-            {1,0,0,-1*LookingAt.X},
-            {0,1,0,-1*LookingAt.Y},
-            {0,0,1,-1*LookingAt.Z},
+            {1,0,0,-1*CameraPosition.X},
+            {0,1,0,-1*CameraPosition.Y},
+            {0,0,1,-1*CameraPosition.Z},
             {0,0,0,1}});
             ViewMatrix = firstView * secondView;
         }

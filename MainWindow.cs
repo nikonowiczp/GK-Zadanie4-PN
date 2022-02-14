@@ -59,5 +59,20 @@ namespace GK_Zadanie4_PN
         {
             sceneController.SetCamera(2);
         }
+
+        private void gouraudaLightingButton_Click(object sender, EventArgs e)
+        {
+            sceneController.SetLightingMode(LightingMode.Geraud);
+        }
+
+        private void staticLightingButton_Click(object sender, EventArgs e)
+        {
+            sceneController.SetLightingMode(LightingMode.Static);
+        }
+
+        private void Phong_Click(object sender, EventArgs e)
+        {
+            sceneController.SetLightingMode(LightingMode.Phong);
+        }
     }
 }
