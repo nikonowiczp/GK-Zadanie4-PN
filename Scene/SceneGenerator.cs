@@ -178,20 +178,33 @@ namespace GK_Zadanie4_PN.Scene
             return new Vertice(position, normal, binormal, tangent);
         }
 
-        public static SceneObject GenerateFloor()
+        public static SceneObject GenerateFloor(double length, int cuts)
         {
             SceneObject sceneObject = new();
             var material = new Material(0.5, 0.5, 0.5, 20);
 
-            Vertice vertice61 = new Vertice(-1, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            Vertice vertice62 = new Vertice(-1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            Vertice vertice63 = new Vertice(1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-            Vertice vertice64 = new Vertice(1, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            double edge = length / ((double)cuts);
+            double currentX = -1*length/2;
+            
+            for(int i = 0; i < cuts; i++)
+            {
+                double currentZ = -1 * length / 2;
+                for (int j = 0; j < cuts; j++)
+                {
+                    Vertice vertice61 = new Vertice(currentX, 0, currentZ, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    Vertice vertice62 = new Vertice(currentX, 0, currentZ+edge, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    Vertice vertice63 = new Vertice(currentX+edge, 0, currentZ + edge, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                    Vertice vertice64 = new Vertice(currentX + edge, 0, currentZ, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-            MeshTriangle bottom1 = new MeshTriangle(vertice61, vertice62, vertice63, material);
-            MeshTriangle bottom2 = new MeshTriangle(vertice63, vertice64, vertice61, material);
-            sceneObject.MeshTriangles.Add(bottom1);
-            sceneObject.MeshTriangles.Add(bottom2);
+                    MeshTriangle bottom1 = new MeshTriangle(vertice61, vertice62, vertice63, material);
+                    MeshTriangle bottom2 = new MeshTriangle(vertice63, vertice64, vertice61, material);
+                    sceneObject.MeshTriangles.Add(bottom1);
+                    sceneObject.MeshTriangles.Add(bottom2);
+                    currentZ+=edge;
+                }
+                currentX += edge;
+            }
+            
 
             return sceneObject;
         }

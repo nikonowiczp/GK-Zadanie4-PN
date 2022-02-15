@@ -42,6 +42,7 @@ namespace GK_Zadanie4_PN
             this.gouraudaLightingButton = new System.Windows.Forms.Button();
             this.staticLightingButton = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.fogButton = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -132,6 +133,7 @@ namespace GK_Zadanie4_PN
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.fogButton);
             this.groupBox2.Controls.Add(this.Phong);
             this.groupBox2.Controls.Add(this.gouraudaLightingButton);
             this.groupBox2.Controls.Add(this.staticLightingButton);
@@ -177,6 +179,16 @@ namespace GK_Zadanie4_PN
             this.timer1.Interval = 150;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // fogButton
+            // 
+            this.fogButton.Location = new System.Drawing.Point(106, 61);
+            this.fogButton.Name = "fogButton";
+            this.fogButton.Size = new System.Drawing.Size(94, 29);
+            this.fogButton.TabIndex = 3;
+            this.fogButton.Text = "Fog";
+            this.fogButton.UseVisualStyleBackColor = true;
+            this.fogButton.Click += new System.EventHandler(this.fogButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -210,6 +222,7 @@ namespace GK_Zadanie4_PN
         private System.Windows.Forms.Button Phong;
         private System.Windows.Forms.Button gouraudaLightingButton;
         private System.Windows.Forms.Button staticLightingButton;
+        private System.Windows.Forms.Button fogButton;
     }
 }
 

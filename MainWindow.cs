@@ -74,5 +74,10 @@ namespace GK_Zadanie4_PN
         {
             sceneController.SetLightingMode(LightingMode.Phong);
         }
+
+        private void fogButton_Click(object sender, EventArgs e)
+        {
+            sceneController.IsFogEnabled = sceneController.IsFogEnabled ? false : true;
+        }
     }
 }

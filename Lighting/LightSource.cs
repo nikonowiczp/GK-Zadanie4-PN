@@ -29,18 +29,25 @@ namespace GK_Zadanie4_PN.Lighting
         public Vector<double> LookingAt = null;
         public Vector<double> _lookingAt = null;
         public Vector<double> Direction = null;
+
+        int currentAnimationFrame = 0;
         public void SetDirectionVector()
         {
             Direction = Vector<double>.Build.DenseOfArray(new double[] { Position[0]-LookingAt[0], Position[1]-LookingAt[1], Position[2] - LookingAt[2]}).Normalize(2);
         }
         public void UpdateMovingLightSource(Matrix<double> modelMatrix)
         {
+            currentAnimationFrame++;
+            if (currentAnimationFrame >= 20) currentAnimationFrame -= 20;
+            
             var position = modelMatrix * Vector<double>.Build.DenseOfArray(new double[] { _position[0], _position[1], _position[2], 1 }).ToColumnMatrix();
-            var lookingAt = modelMatrix * Vector<double>.Build.DenseOfArray(new double[] { _lookingAt[0], _lookingAt[1], _lookingAt[2], 1 }).ToColumnMatrix();
+            var lookingAt = modelMatrix * Vector<double>.Build.DenseOfArray(new double[] { _lookingAt[0] -2 + 4*Math.Abs(10-currentAnimationFrame)/10, _lookingAt[1], _lookingAt[2], 1 }).ToColumnMatrix();
 
             Position = Vector<double>.Build.DenseOfArray(new double[] { position[0,0], position[1,0], position[2,0] });
             LookingAt = Vector<double>.Build.DenseOfArray(new double[] { lookingAt[0, 0], lookingAt[1, 0], lookingAt[2, 0] });
             SetDirectionVector();
+            
+
         }
     }
 }

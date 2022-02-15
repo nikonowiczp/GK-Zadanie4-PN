@@ -30,9 +30,9 @@ namespace GK_Zadanie4_PN.Scene
             GenerateProjectionMatrix( Math.PI/4, 1, 20, width/height);
 
             LightSource light = new LightSource((4,4,-1),Color.White);
-            LightSource light2 = new LightSource((0, 1, 3), Color.White);
+            LightSource light2 = new LightSource((0, 1, 4), Color.White);
             light2.isDirectional = true;
-            light2.alpha = Math.PI / 3;
+            light2.alpha = Math.PI /4;
             light2._lookingAt = Vector<double>.Build.DenseOfArray(new double[] {0,0,6 });
             lightSources.Add(light);
             lightSources.Add(light2);
@@ -48,7 +48,7 @@ namespace GK_Zadanie4_PN.Scene
         private Camera currentCamera = null;
         public LightingMode lightingMode = LightingMode.Static;
         public List<LightSource> lightSources = new();
-
+        public bool IsFogEnabled = false;
         public void SetCamera(int i)
         {
             currentCamera = Cameras[i];
@@ -336,9 +336,13 @@ namespace GK_Zadanie4_PN.Scene
         private Vector<double> CalculateSingleLight(SinglePixel pixel, HomogenousClippingSpaceTriangle triangle)
         {
             Vector<double> finalColor = Vector<double>.Build.DenseOfArray(new double[] { 0, 0, 0});
-            Vector<double> normal = Vector<double>.Build.DenseOfArray(new double[] { pixel.NormalX, pixel.NormalY, pixel.NormalZ }).Normalize(2);
+            Vector<double> NormalWersor = Vector<double>.Build.DenseOfArray(new double[] { pixel.NormalX, pixel.NormalY, pixel.NormalZ }).Normalize(2);
 
-            for(int i = 0; i < 3; i++)
+            Vector<double> ObserverWersor = Vector<double>.Build.DenseOfArray(new double[] { currentCamera.CameraPosition.X - pixel.WorldX, currentCamera.CameraPosition.Y - pixel.WorldY, currentCamera.CameraPosition.Z - pixel.WorldZ });
+            double observerLength = ObserverWersor.L2Norm();
+            ObserverWersor = ObserverWersor.Normalize(2);
+
+            for (int i = 0; i < 3; i++)
             {
                 finalColor[i] = triangle.Material.KA * pixel.GetColorFromVector(i);
             }
@@ -348,21 +352,34 @@ namespace GK_Zadanie4_PN.Scene
                 Vector<double> LPixelToLight = Vector<double>.Build.DenseOfArray(new double[] { light.Position[0] - pixel.WorldX, light.Position[1] - pixel.WorldY, light.Position[2] - pixel.WorldZ });
                 double toPixelToLight = LPixelToLight.L2Norm();
                 LPixelToLight = LPixelToLight.Normalize(2);
-                Vector<double> NormalWersor = Vector<double>.Build.DenseOfArray(new double[] { pixel.NormalX, pixel.NormalY, pixel.NormalZ }).Normalize(2);
-                Vector<double> ReflectionWersor = (2* (LPixelToLight*NormalWersor)*NormalWersor-LPixelToLight).Normalize(2);
-                Vector<double> ObserverWersor = Vector<double>.Build.DenseOfArray(new double[] {currentCamera.CameraPosition.X-pixel.WorldX,currentCamera.CameraPosition.Y-pixel.WorldY, currentCamera.CameraPosition.Z - pixel.WorldZ}).Normalize(2);
-                double FirstMulti = triangle.Material.KD *(LPixelToLight*NormalWersor);
-                double SecondMulti = triangle.Material.KS * Math.Pow(ReflectionWersor * ObserverWersor, triangle.Material.Shininess);
 
-                double iF = 1 / (1+0.09*toPixelToLight + 0.032*toPixelToLight*toPixelToLight);
                 if (light.isDirectional)
                 {
                     var lightVector = light.Direction;
                     if (Math.Acos(lightVector.DotProduct(LPixelToLight)) > light.alpha) continue;
                 }
+
+                Vector<double> ReflectionWersor = (2* (LPixelToLight*NormalWersor)*NormalWersor-LPixelToLight).Normalize(2);
+                
+                double FirstMulti = triangle.Material.KD *(LPixelToLight*NormalWersor);
+                double SecondMulti = triangle.Material.KS * Math.Pow(ReflectionWersor * ObserverWersor, triangle.Material.Shininess);
+
+                double iF = 1 / (1+0.09*toPixelToLight + 0.032*toPixelToLight*toPixelToLight);
+                //if (IsFogEnabled)
+                //{
+                //    iF *= observerLength;
+                //}
+                
                 for(int i = 0;i< 3; i++)
                 {
                     finalColor[i] += (FirstMulti * light.ColorDiffuse[i] + SecondMulti * light.ColorSpecular[i])*iF;
+                }
+            }
+            if (IsFogEnabled)
+            {
+                for(int i = 0; i< 3; i++)
+                {
+                    finalColor[i] *= observerLength;
                 }
             }
             for(int i = 0; i < 3; i++)

@@ -46,7 +46,7 @@ namespace GK_Zadanie4_PN.Scene
             cubeMoving2.observingCameraNumber = 1;
             cubeMoving2.movingAlongLightNumber = 1;
 
-            var sphere = SceneGenerator.GenerateSphere(2,10,10);
+            var sphere = SceneGenerator.GenerateSphere(2,20,30);
             sphere.ObjectColor = Color.Pink;
             sphere.originalModelMatrix = DenseMatrix.OfArray(new double[,] {
         {1,0,0,0},
@@ -66,46 +66,20 @@ namespace GK_Zadanie4_PN.Scene
             sphere2.VectorMoveY = 4;
             sphere2.modelAnimation = new AnimationRotation(135);
 
-            var floor1 = SceneGenerator.GenerateFloor();
+            var floor1 = SceneGenerator.GenerateFloor(20,32);
             floor1.ObjectColor = Color.DarkGreen;
             floor1.originalModelMatrix = DenseMatrix.OfArray(new double[,] {
-        {5,0,0,5},
+        {1,0,0,0},
         {0,1,0,0},
-        {0,0,5,5},
+        {0,0,1,0},
         {0,0,0,1}});
             floor1.dontCut = true;
-            var floor2 = SceneGenerator.GenerateFloor();
-            floor2.ObjectColor = Color.DarkGreen;
-            floor2.originalModelMatrix = DenseMatrix.OfArray(new double[,] {
-        {5,0,0,-5},
-        {0,1,0,0},
-        {0,0,5,5},
-        {0,0,0,1}});
-            floor2.dontCut = true;
-            var floor3 = SceneGenerator.GenerateFloor();
-            floor3.ObjectColor = Color.DarkGreen;
-            floor3.originalModelMatrix = DenseMatrix.OfArray(new double[,] {
-        {5,0,0,5},
-        {0,1,0,0},
-        {0,0,5,-5},
-        {0,0,0,1}});
-            floor3.dontCut = true;
-            var floor4 = SceneGenerator.GenerateFloor();
-            floor4.ObjectColor = Color.DarkGreen;
-            floor4.originalModelMatrix = DenseMatrix.OfArray(new double[,] {
-        {5,0,0,-5},
-        {0,1,0,0},
-        {0,0,5,-5},
-        {0,0,0,1}});
-            floor4.dontCut = true;
-            //SceneObjects.Add(cubeBottom);
+            
             SceneObjects.Add(sphere);
-            //SceneObjects.Add(sphere2);
+            SceneObjects.Add(sphere2);
             SceneObjects.Add(floor1);
-            SceneObjects.Add(floor2);
-            SceneObjects.Add(floor3);
-            SceneObjects.Add(floor4);
-            //SceneObjects.Add(cubeMoving);
+
+            SceneObjects.Add(cubeMoving);
             SceneObjects.Add(cubeMoving2);
 
         }
