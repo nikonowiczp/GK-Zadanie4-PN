@@ -1,4 +1,5 @@
 ﻿using GK_Zadanie4_PN.Objects;
+using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,14 @@ namespace GK_Zadanie4_PN.Scene
         public double addWorldX;
         public double addWorldY;
         public double addWorldZ;
+
+        public double currentColorR;
+        public double currentColorG;
+        public double currentColorB;
+
+        public double addColorR;
+        public double addColorG;
+        public double addColorB;
         //tylko dla przypadku linii rownoleglej
         public int maxX;
 
@@ -47,9 +56,13 @@ namespace GK_Zadanie4_PN.Scene
             currentWorldX += addWorldX;
             currentWorldY += addWorldY;
             currentWorldZ += addWorldZ;
+
+            currentColorR += addColorR;
+            currentColorG += addColorG;
+            currentColorB += addColorB;
         }
 
-        public void Initialize(Vertice lower, Vertice higher)
+        public void Initialize(Vertice lower, Vertice higher, Vector<double> lowerPixelColor = null, Vector<double> higherPixelColor = null, bool geurad = false)
         {
             yMax = (int)higher.modelPosition[1, 0];
             currentX = lower.modelPosition[0, 0];
@@ -74,6 +87,17 @@ namespace GK_Zadanie4_PN.Scene
             addWorldX = lenY == 0 ? 0 : (higher.worldPosition[0, 0] - lower.worldPosition[0, 0]) / lenY;
             addWorldY = lenY == 0 ? 0 : (higher.worldPosition[1, 0] - lower.worldPosition[1, 0]) / lenY;
             addWorldZ = lenY == 0 ? 0 : (higher.worldPosition[2, 0] - lower.worldPosition[2, 0]) / lenY;
+
+            if (geurad)
+            {
+                currentColorR = lowerPixelColor[0];
+                currentColorG = lowerPixelColor[1];
+                currentColorB = lowerPixelColor[2];
+
+                addColorR = lenY == 0 ? 0 : (higherPixelColor[0] - lowerPixelColor[0]) / lenY;
+                addColorG = lenY == 0 ? 0 : (higherPixelColor[1] - lowerPixelColor[1]) / lenY;
+                addColorB = lenY == 0 ? 0 : (higherPixelColor[2] - lowerPixelColor[2]) / lenY;
+            }
         }
     }
 }

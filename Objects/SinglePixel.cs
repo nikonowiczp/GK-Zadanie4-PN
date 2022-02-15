@@ -21,6 +21,18 @@ namespace GK_Zadanie4_PN.Objects
             WorldZ = worldCoordinates.Z;
         }
 
+        public SinglePixel((double x, double y, double z) screenCoordinates, (double X, double Y, double Z) worldCoordinates, (double normalX, double normalY, double normalZ) normalCoordinates, double colorR, double colorG, double colorB)
+        {
+            X = screenCoordinates.x; Y = screenCoordinates.y; Z = screenCoordinates.z;
+            R = colorR; G = colorG; B = colorB;
+            NormalX = normalCoordinates.normalX;
+            NormalY = normalCoordinates.normalY;
+            NormalZ = normalCoordinates.normalZ;
+            WorldX = worldCoordinates.X;
+            WorldY = worldCoordinates.Y;
+            WorldZ = worldCoordinates.Z;
+        }
+
         public Color GetColor()
         {
             return Color.FromArgb((int)R,(int) G,(int) B);

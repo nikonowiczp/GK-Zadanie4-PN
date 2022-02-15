@@ -37,11 +37,11 @@ namespace GK_Zadanie4_PN
             this.camera3Button = new System.Windows.Forms.Button();
             this.camera2Button = new System.Windows.Forms.Button();
             this.camera1Button = new System.Windows.Forms.Button();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.staticLightingButton = new System.Windows.Forms.Button();
-            this.gouraudaLightingButton = new System.Windows.Forms.Button();
             this.Phong = new System.Windows.Forms.Button();
+            this.gouraudaLightingButton = new System.Windows.Forms.Button();
+            this.staticLightingButton = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.flowLayoutPanel1.SuspendLayout();
@@ -128,10 +128,6 @@ namespace GK_Zadanie4_PN
             this.camera1Button.UseVisualStyleBackColor = true;
             this.camera1Button.Click += new System.EventHandler(this.camera1Button_Click);
             // 
-            // timer1
-            // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -146,15 +142,15 @@ namespace GK_Zadanie4_PN
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Lighting";
             // 
-            // staticLightingButton
+            // Phong
             // 
-            this.staticLightingButton.Location = new System.Drawing.Point(6, 26);
-            this.staticLightingButton.Name = "staticLightingButton";
-            this.staticLightingButton.Size = new System.Drawing.Size(94, 29);
-            this.staticLightingButton.TabIndex = 0;
-            this.staticLightingButton.Text = "Static";
-            this.staticLightingButton.UseVisualStyleBackColor = true;
-            this.staticLightingButton.Click += new System.EventHandler(this.staticLightingButton_Click);
+            this.Phong.Location = new System.Drawing.Point(6, 61);
+            this.Phong.Name = "Phong";
+            this.Phong.Size = new System.Drawing.Size(94, 29);
+            this.Phong.TabIndex = 2;
+            this.Phong.Text = "Phong";
+            this.Phong.UseVisualStyleBackColor = true;
+            this.Phong.Click += new System.EventHandler(this.Phong_Click);
             // 
             // gouraudaLightingButton
             // 
@@ -166,15 +162,20 @@ namespace GK_Zadanie4_PN
             this.gouraudaLightingButton.UseVisualStyleBackColor = true;
             this.gouraudaLightingButton.Click += new System.EventHandler(this.gouraudaLightingButton_Click);
             // 
-            // Phong
+            // staticLightingButton
             // 
-            this.Phong.Location = new System.Drawing.Point(6, 61);
-            this.Phong.Name = "Phong";
-            this.Phong.Size = new System.Drawing.Size(94, 29);
-            this.Phong.TabIndex = 2;
-            this.Phong.Text = "Phong";
-            this.Phong.UseVisualStyleBackColor = true;
-            this.Phong.Click += new System.EventHandler(this.Phong_Click);
+            this.staticLightingButton.Location = new System.Drawing.Point(6, 26);
+            this.staticLightingButton.Name = "staticLightingButton";
+            this.staticLightingButton.Size = new System.Drawing.Size(94, 29);
+            this.staticLightingButton.TabIndex = 0;
+            this.staticLightingButton.Text = "Static";
+            this.staticLightingButton.UseVisualStyleBackColor = true;
+            this.staticLightingButton.Click += new System.EventHandler(this.staticLightingButton_Click);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 150;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainWindow
             // 

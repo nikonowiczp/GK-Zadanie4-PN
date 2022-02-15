@@ -9,14 +9,16 @@ namespace GK_Zadanie4_PN.Animations
 {
     public class AnimationAlongLineLooped : Animation
     {
-        public AnimationAlongLineLooped((double X, double Y, double Z) vector, int delay, int duration, bool startImmedietaly = true)
+        public AnimationAlongLineLooped((double X, double Y, double Z) vectorBegin, (double X, double Y, double Z) vectorEnd, int delay, int duration, bool startImmedietaly = true)
         {
             if (!startImmedietaly) CurrentFrame = 2*duration+1;
-            Vector = vector;
+            VectorBegin = vectorBegin;
+            VectorEnd = vectorEnd;
             Delay = delay;
             Duration = duration;
         }
-        (double X, double Y, double Z) Vector;
+        (double X, double Y, double Z) VectorBegin;
+        (double X, double Y, double Z) VectorEnd;
         int Delay;
         int Duration;
 
@@ -40,9 +42,9 @@ namespace GK_Zadanie4_PN.Animations
             {
                 return Matrix<double>.Build.DenseOfArray(new double[,]
                 {
-                    {1,0,0,Vector.X*CurrentFrame/Duration },
-                    {0,1,0,Vector.X*CurrentFrame/Duration },
-                    {0,0,1,Vector.X*CurrentFrame/Duration },
+                    {1,0,0,(VectorEnd.X - VectorBegin.X)*CurrentFrame/Duration },
+                    {0,1,0,(VectorEnd.Y - VectorBegin.Y)*CurrentFrame/Duration },
+                    {0,0,1,(VectorEnd.Z - VectorBegin.Z)*CurrentFrame/Duration },
                     {0,0,0,1 }
                 });
             }
@@ -51,9 +53,9 @@ namespace GK_Zadanie4_PN.Animations
             {
                 return Matrix<double>.Build.DenseOfArray(new double[,]
                 {
-                    {1,0,0,Vector.X*(2*Duration-CurrentFrame)/Duration },
-                    {0,1,0,Vector.X*(2*Duration-CurrentFrame)/Duration },
-                    {0,0,1,Vector.X*(2*Duration-CurrentFrame)/Duration },
+                    {1,0,0,(VectorEnd.X - VectorBegin.X)*(2*Duration-CurrentFrame)/Duration },
+                    {0,1,0,(VectorEnd.Y - VectorBegin.Y)*(2*Duration-CurrentFrame)/Duration },
+                    {0,0,1,(VectorEnd.Z - VectorBegin.Z)*(2*Duration-CurrentFrame)/Duration },
                     {0,0,0,1 }
                 });
             }

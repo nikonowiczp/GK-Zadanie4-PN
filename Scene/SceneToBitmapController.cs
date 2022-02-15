@@ -20,17 +20,22 @@ namespace GK_Zadanie4_PN.Scene
             Height = height;
 
             bitmapLowLevelController = new BitmapLowLevelController(Width, Height);
-            currentCamera = new Camera((12,12,-5),(0,0,0));
+            currentCamera = new Camera((24,24,-10),(0,0,0));
             Cameras.Add(currentCamera);
 
-            var camera = new Camera((25, 0, 1), (0, 0, 0));
+            var camera = new Camera((0, 24, -40), (0, 0, 0));
             Cameras.Add(camera);
-            var camera2 = new Camera((12, -12, 1), (0, 0, 0));
+            var camera2 = new Camera((24, 24, -10), (0, 0, 0));
             Cameras.Add(camera2);
             GenerateProjectionMatrix( Math.PI/4, 1, 20, width/height);
 
-            LightSource light = new LightSource((0,3,3),Color.Yellow);
+            LightSource light = new LightSource((4,4,-1),Color.White);
+            LightSource light2 = new LightSource((0, 1, 3), Color.White);
+            light2.isDirectional = true;
+            light2.alpha = Math.PI / 3;
+            light2._lookingAt = Vector<double>.Build.DenseOfArray(new double[] {0,0,6 });
             lightSources.Add(light);
+            lightSources.Add(light2);
         }
 
         Scene scene = new Scene();
@@ -87,12 +92,27 @@ namespace GK_Zadanie4_PN.Scene
 
             foreach(var sceneObj in scene.SceneObjects)
             {
-                foreach(var triangle in sceneObj.MeshTriangles)
+                if(sceneObj.observingCameraNumber != -1)
+                {
+                    Cameras[sceneObj.observingCameraNumber].NextFrame(sceneObj.ModelMatrix);
+                }
+
+                if (sceneObj.movingAlongCameraNumber != -1)
+                {
+                    Cameras[sceneObj.movingAlongCameraNumber].NextFrameMoving(sceneObj.ModelMatrix);
+                }
+
+                if(sceneObj.movingAlongLightNumber != -1)
+                {
+                    lightSources[sceneObj.movingAlongLightNumber].UpdateMovingLightSource(sceneObj.ModelMatrix);
+                }
+
+                foreach (var triangle in sceneObj.MeshTriangles)
                 {
                     var clipTriangle = new HomogenousClippingSpaceTriangle(projectionMatrix, viewMatrix, sceneObj.ModelMatrix, triangle, sceneObj.ObjectColor);
 
                     var normal = Vector<double>.Build.DenseOfArray(new double[] { clipTriangle.Vertices[0].modelNormal[0], clipTriangle.Vertices[0].modelNormal[1], clipTriangle.Vertices[0].modelNormal[2] }).Normalize(2);
-                    if (lookingVector * normal <= 0)
+                    if (lookingVector * normal <= 0 || sceneObj.dontCut)
                         clippingTriangles.Add(clipTriangle);
                 }
             }
@@ -109,13 +129,9 @@ namespace GK_Zadanie4_PN.Scene
                 GeneratePixels(triangle);
             }
             Rasterize(clippingTriangles);
-            ApplyLighting(clippingTriangles);
+            if(lightingMode == LightingMode.Phong)ApplyLightingPhong(clippingTriangles);
+            if(lightingMode == LightingMode.Static)ApplyLightingStatic(clippingTriangles);
             DrawPixels(clippingTriangles);
-        }
-
-        private Point GetPointFromVertice(Vertice vertice)
-        {
-            return new Point((int)vertice.modelPosition[0,0], (int)vertice.modelPosition[1,0]);
         }
 
         private void Rasterize(List<HomogenousClippingSpaceTriangle> clippingTriangles)
@@ -135,6 +151,7 @@ namespace GK_Zadanie4_PN.Scene
             }
 
             FillScanLine(cells, triangle);
+
         }
 
         private (int, ScanLineAlgorithmCell) GenerateETEdge(HomogenousClippingSpaceTriangle triangle, int i1, int i2)
@@ -150,7 +167,17 @@ namespace GK_Zadanie4_PN.Scene
             }
 
             ScanLineAlgorithmCell cell = new();
-            cell.Initialize(lower, higher);
+            if(lightingMode == LightingMode.Geraud)
+            {
+                SinglePixel lowerPixel = new SinglePixel((lower.modelPosition[0,0], lower.modelPosition[1, 0], lower.modelPosition[2, 0]), (lower.worldPosition[0,0], lower.worldPosition[1, 0], lower.worldPosition[2, 0]), (lower.modelNormal[0], lower.modelNormal[1], lower.modelNormal[2]), triangle.TriangleColor);
+                SinglePixel higherPixel = new SinglePixel((higher.modelPosition[0, 0], higher.modelPosition[1, 0], higher.modelPosition[2, 0]), (higher.worldPosition[0, 0], higher.worldPosition[1, 0], higher.worldPosition[2, 0]), (higher.modelNormal[0], higher.modelNormal[1], higher.modelNormal[2]), triangle.TriangleColor);
+                cell.Initialize(lower, higher, CalculateSingleLight(lowerPixel, triangle), CalculateSingleLight(higherPixel, triangle), true);
+            }
+            else
+            {
+                cell.Initialize(lower, higher);
+            }
+            
             
             return ((int)lower.modelPosition[1,0], cell);
         }
@@ -194,10 +221,34 @@ namespace GK_Zadanie4_PN.Scene
                     double addWorldX = len == 0 ? 0 : (AET[1].currentWorldX - AET[0].currentWorldX) / len;
                     double addWorldY = len == 0 ? 0 : (AET[1].currentWorldY - AET[0].currentWorldY) / len;
                     double addWorldZ = len == 0 ? 0 : (AET[1].currentWorldZ - AET[0].currentWorldZ) / len;
-                    for (int x = currentX; x<maxX; x++)
+
+                    double currentColorR = 0;
+                    double currentColorG = 0;
+                    double currentColorB = 0;
+
+                    double addColorR = 0;
+                    double addColorG = 0;
+                    double addColorB = 0;
+                    if(lightingMode == LightingMode.Geraud)
                     {
-                        bitmapLowLevelController.SetSinglePixel(x, currentY, triangle.TriangleColor);
-                        triangle.Pixels.Add(new SinglePixel((x, currentY, currentZ),(currentWorldX,currentWorldY,currentWorldZ),(currentNormalX,currentNormalY, currentNormalZ), triangle.TriangleColor));
+                        currentColorR = AET[0].currentColorR;
+                        currentColorG = AET[0].currentColorG;
+                        currentColorB = AET[0].currentColorB;
+
+                        addColorR = len == 0 ? 0 : (AET[1].currentColorR - AET[0].currentColorR) / len;
+                        addColorG = len == 0 ? 0 : (AET[1].currentColorG - AET[0].currentColorG) / len;
+                        addColorB = len == 0 ? 0 : (AET[1].currentColorB - AET[0].currentColorB) / len;
+                    }
+                    if(!(currentY>Height || currentY<0)) for (int x = currentX; x<maxX; x++)
+                    {
+                        if(x >0 && x < Width)
+                        {
+                            bitmapLowLevelController.SetSinglePixel(x, currentY, triangle.TriangleColor);
+                            if (lightingMode != LightingMode.Geraud) triangle.Pixels.Add(new SinglePixel((x, currentY, currentZ), (currentWorldX, currentWorldY, currentWorldZ), (currentNormalX, currentNormalY, currentNormalZ), triangle.TriangleColor));
+                            else triangle.Pixels.Add(new SinglePixel((x, currentY, currentZ), (currentWorldX, currentWorldY, currentWorldZ), (currentNormalX, currentNormalY, currentNormalZ), currentColorR, currentColorG, currentColorB));
+
+                        }
+
                         currentZ += addZ;
                         currentNormalX += addNormalX;
                         currentNormalY += addNormalY;
@@ -205,7 +256,12 @@ namespace GK_Zadanie4_PN.Scene
                         currentWorldX += addWorldX;
                         currentWorldY += addWorldY;
                         currentWorldZ += addWorldZ;
-
+                        if(lightingMode == LightingMode.Geraud)
+                        {
+                            currentColorR += addColorR;
+                            currentColorG += addColorG;
+                            currentColorB += addColorB;
+                        }
                     }
                 }
 
@@ -244,20 +300,39 @@ namespace GK_Zadanie4_PN.Scene
             }
         }
 
-        private void ApplyLighting(List<HomogenousClippingSpaceTriangle> clippingTriangles)
+        private async void ApplyLightingPhong(List<HomogenousClippingSpaceTriangle> clippingTriangles)
         {
+            var list = new List<Task>();
             foreach(var triangle in clippingTriangles)
             {
-                foreach(var pixel in triangle.Pixels)
+                Task task = ApplyLightingPhongForSingleTriangle(triangle);
+                list.Add(task); 
+            }
+            await Task.WhenAll(list);
+        }
+        private async Task ApplyLightingPhongForSingleTriangle(HomogenousClippingSpaceTriangle triangle)
+        {
+            foreach (var pixel in triangle.Pixels)
+            {
+                var color = CalculateSingleLight(pixel, triangle);
+                pixel.R = color[0];
+                pixel.G = color[1];
+                pixel.B = color[2];
+            }
+        }
+        private void ApplyLightingStatic(List<HomogenousClippingSpaceTriangle> clippingTriangles)
+        {
+            foreach (var triangle in clippingTriangles)
+            {
+                var color = CalculateSingleLight(triangle.GetSinglePixel(), triangle);
+                foreach (var pixel in triangle.Pixels)
                 {
-                    var color = CalculateSingleLight(pixel, triangle);
                     pixel.R = color[0];
                     pixel.G = color[1];
                     pixel.B = color[2];
                 }
             }
         }
-
         private Vector<double> CalculateSingleLight(SinglePixel pixel, HomogenousClippingSpaceTriangle triangle)
         {
             Vector<double> finalColor = Vector<double>.Build.DenseOfArray(new double[] { 0, 0, 0});
@@ -280,6 +355,11 @@ namespace GK_Zadanie4_PN.Scene
                 double SecondMulti = triangle.Material.KS * Math.Pow(ReflectionWersor * ObserverWersor, triangle.Material.Shininess);
 
                 double iF = 1 / (1+0.09*toPixelToLight + 0.032*toPixelToLight*toPixelToLight);
+                if (light.isDirectional)
+                {
+                    var lightVector = light.Direction;
+                    if (Math.Acos(lightVector.DotProduct(LPixelToLight)) > light.alpha) continue;
+                }
                 for(int i = 0;i< 3; i++)
                 {
                     finalColor[i] += (FirstMulti * light.ColorDiffuse[i] + SecondMulti * light.ColorSpecular[i])*iF;

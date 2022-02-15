@@ -50,9 +50,25 @@ namespace GK_Zadanie4_PN.Objects
             }
         }
 
-        public void GeneratePixelsFromBottom()
+        public Vector<double> GetNormalVector()
         {
-
+            double X = (Vertices[0].modelNormal[0] + Vertices[1].modelNormal[0] + Vertices[2].modelNormal[0]);
+            double Y = (Vertices[0].modelNormal[1] + Vertices[1].modelNormal[1] + Vertices[2].modelNormal[1]);
+            double Z = (Vertices[0].modelNormal[2] + Vertices[1].modelNormal[2] + Vertices[2].modelNormal[2]);
+            return Vector<double>.Build.DenseOfArray(new double[] { X,Y,Z});
         }
+
+        public SinglePixel GetSinglePixel()
+        {
+            var screenCoordinates = (Vertices[0].modelPosition + Vertices[1].modelPosition + Vertices[2].modelPosition)/3;
+            var worldCoordinates = (Vertices[0].worldPosition + Vertices[1].worldPosition + Vertices[2].worldPosition) / 3;
+            var normalVector = GetNormalVector();
+            SinglePixel singlePixel = new SinglePixel((screenCoordinates[0,0], screenCoordinates[1, 0], screenCoordinates[2, 0] ),
+                (worldCoordinates[0,0], worldCoordinates[1, 0], worldCoordinates[2, 0]),
+                (normalVector[0], normalVector[1], normalVector[2]),
+                TriangleColor);
+            return singlePixel;
+        }
+
     }
 }

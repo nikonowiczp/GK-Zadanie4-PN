@@ -81,7 +81,7 @@ namespace GK_Zadanie4_PN.Scene
 
         public static SceneObject GenerateSphere(double R, int stackCount, int sectorCount)
         {
-            var material = new Material(0.5, 0.5, 0.5, 20);
+            var material = new Material(0.8, 0.8, 1, 50);
             var sceneObject = new SceneObject();
             double stackStep = MathF.PI / stackCount;
             double sectorStep = 2 * MathF.PI / sectorCount;
@@ -176,6 +176,24 @@ namespace GK_Zadanie4_PN.Scene
 
             Vector<double> normal = (position - Vector<double>.Build.DenseOfArray(new double[] { 0, 0, 0 })).Normalize(2);
             return new Vertice(position, normal, binormal, tangent);
+        }
+
+        public static SceneObject GenerateFloor()
+        {
+            SceneObject sceneObject = new();
+            var material = new Material(0.5, 0.5, 0.5, 20);
+
+            Vertice vertice61 = new Vertice(-1, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            Vertice vertice62 = new Vertice(-1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            Vertice vertice63 = new Vertice(1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            Vertice vertice64 = new Vertice(1, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+            MeshTriangle bottom1 = new MeshTriangle(vertice61, vertice62, vertice63, material);
+            MeshTriangle bottom2 = new MeshTriangle(vertice63, vertice64, vertice61, material);
+            sceneObject.MeshTriangles.Add(bottom1);
+            sceneObject.MeshTriangles.Add(bottom2);
+
+            return sceneObject;
         }
     }
 }

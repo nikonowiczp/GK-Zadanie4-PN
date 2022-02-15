@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using GK_Zadanie4_PN.Objects;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
@@ -15,6 +15,7 @@ namespace GK_Zadanie4_PN.Scene
 
         public (double X, double Y, double Z) CameraPosition;
         public (double X, double Y, double Z) LookingAt;
+
         public Camera((double X, double Y, double Z) cameraPosition, (double X, double Y, double Z) lookingAt)
         {
             CameraPosition = cameraPosition;
@@ -48,11 +49,22 @@ namespace GK_Zadanie4_PN.Scene
             {0,0,0,1}});
             ViewMatrix = firstView * secondView;
         }
-        public void NextFrame()
+        public void NextFrame(Matrix<double> matrix)
         {
+            var lookingAtVector = matrix * Vector<double>.Build.DenseOfArray(new double[] {0,0,0,1}).ToColumnMatrix();
 
+            LookingAt = (lookingAtVector[0,0], lookingAtVector[1,0], lookingAtVector[2,0]);
+
+            UpdateViewMatrix();
         }
+        public void NextFrameMoving(Matrix<double>matrix)
+        {
+            var lookingAtVector = matrix * Vector<double>.Build.DenseOfArray(new double[] { 0, 0, 0, 1 }).ToColumnMatrix();
 
+            CameraPosition = (lookingAtVector[0, 0]+12, lookingAtVector[1, 0]+12, lookingAtVector[2, 0]+12);
+            LookingAt = (lookingAtVector[0, 0], lookingAtVector[1, 0], lookingAtVector[2, 0]);
+            UpdateViewMatrix();
+        }
         private Vector<double> Cross(Vector<double> left, Vector<double> right)
         {
             if ((left.Count != 3 || right.Count != 3))
