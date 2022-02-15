@@ -26,7 +26,7 @@ namespace GK_Zadanie4_PN.Objects
         {
             modelPosition = Vector.Build.DenseOfArray(new double[] { x, y, z }).ToColumnMatrix();
 
-            modelNormal = Vector.Build.DenseOfArray( new double[] { normalX, normalY, normalZ });
+            modelNormal = Vector.Build.DenseOfArray( new double[] { normalX, normalY, normalZ , 1});
             
             modelTangent = Vector.Build.DenseOfArray(new double[] {tangentX, tangentY, tangentZ });
 
@@ -35,7 +35,18 @@ namespace GK_Zadanie4_PN.Objects
             modelTexture = Vector.Build.DenseOfArray(new double[] {textureX, textureY, textureZ });
 
         }
+        public Vertice(Vector<double> position, Vector<double> normal, Vector<double> binormal, Vector<double> tangent)
+        {
+            modelPosition = position.ToColumnMatrix();
 
+            modelNormal = Vector.Build.DenseOfArray(new double[] { normal[0], normal[1], normal[2], 1 });
+
+            modelTangent = tangent;
+
+            modelBinormal=binormal;
+
+            modelTexture = Vector.Build.DenseOfArray(new double[] { 0,0,0 });
+        }
         public Vertice(Vertice vertice)
         {
             modelPosition = vertice.modelPosition.Clone();

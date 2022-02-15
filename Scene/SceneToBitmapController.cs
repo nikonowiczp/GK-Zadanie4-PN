@@ -29,7 +29,7 @@ namespace GK_Zadanie4_PN.Scene
             Cameras.Add(camera2);
             GenerateProjectionMatrix( Math.PI/4, 1, 20, width/height);
 
-            LightSource light = new LightSource((3,3,0),Color.Yellow);
+            LightSource light = new LightSource((0,3,3),Color.Yellow);
             lightSources.Add(light);
         }
 
@@ -82,28 +82,30 @@ namespace GK_Zadanie4_PN.Scene
             bitmapLowLevelController.CleanBitmap();
 
             List<HomogenousClippingSpaceTriangle> clippingTriangles = new();
+
+            Vector<double> lookingVector = Vector<double>.Build.DenseOfArray(new double[] {currentCamera.LookingAt.X-currentCamera.CameraPosition.X, currentCamera.LookingAt.Y - currentCamera.CameraPosition.Y, currentCamera.LookingAt.Z - currentCamera.CameraPosition.Z }).Normalize(2);
+
             foreach(var sceneObj in scene.SceneObjects)
             {
                 foreach(var triangle in sceneObj.MeshTriangles)
                 {
-                    clippingTriangles.Add(new HomogenousClippingSpaceTriangle(projectionMatrix, viewMatrix, sceneObj.ModelMatrix, triangle, sceneObj.ObjectColor));
+                    var clipTriangle = new HomogenousClippingSpaceTriangle(projectionMatrix, viewMatrix, sceneObj.ModelMatrix, triangle, sceneObj.ObjectColor);
+
+                    var normal = Vector<double>.Build.DenseOfArray(new double[] { clipTriangle.Vertices[0].modelNormal[0], clipTriangle.Vertices[0].modelNormal[1], clipTriangle.Vertices[0].modelNormal[2] }).Normalize(2);
+                    if (lookingVector * normal <= 0)
+                        clippingTriangles.Add(clipTriangle);
                 }
             }
             
             DrawClippedTriangles(clippingTriangles);
         }
+
         private void DrawClippedTriangles(List<HomogenousClippingSpaceTriangle> clippingTriangles)
         {
             foreach (var triangle in clippingTriangles)
             {
                 triangle.TranslateVerticesToScreenCoordinates();
                 triangle.ScaleToScreen(Width, Height);
-                for (int i = 0; i < 3; i++)
-                {
-                    var point1 = GetPointFromVertice(triangle.Vertices[i]);
-                    var point2 = GetPointFromVertice(triangle.Vertices[(i + 1) % 3]);
-                    bitmapLowLevelController.DrawLine(point1, point2 , Color.Black);
-                }
                 GeneratePixels(triangle);
             }
             Rasterize(clippingTriangles);

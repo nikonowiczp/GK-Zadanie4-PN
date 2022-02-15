@@ -11,7 +11,7 @@ using System.Drawing;
 
 namespace GK_Zadanie4_PN.Objects
 {
-    internal class SceneObject
+    public class SceneObject
     {
         public List<MeshTriangle> MeshTriangles= new();
         public Matrix<double> originalModelMatrix;

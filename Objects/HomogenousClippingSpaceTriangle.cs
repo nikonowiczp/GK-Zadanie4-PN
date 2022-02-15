@@ -29,7 +29,8 @@ namespace GK_Zadanie4_PN.Objects
                 var vec2 = vec.ToColumnMatrix();
                 Vertices[i].worldPosition = modelMatrix * vec2;
                 Vertices[i].modelPosition = MultiplyMatrix * vec2;
-                
+                Vertices[i].modelNormal = modelMatrix * Vertices[i].modelNormal;
+
             }
         }
 
